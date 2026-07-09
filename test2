@@ -1,0 +1,35 @@
+"""Simple script: print numbers 1..n, replacing multiples of 2 with "test".
+
+Usage:
+	Run the script and enter an integer when prompted::
+
+		python test2
+		n: 6
+
+	Output::
+		1
+		test
+		3
+		test
+		5
+		test
+
+This module is intentionally minimal for demonstration and learning.
+"""
+
+def main():
+	# Read integer input from the user
+	try:
+		n = int(input("n: "))
+	except Exception:
+		print("Please enter an integer")
+		return
+
+	# Iterate from 1 to n inclusive and print 'test' for even numbers
+	for i in range(1, n + 1):
+		print("test" if i % 2 == 0 else i)
+
+
+if __name__ == "__main__":
+	main()
+

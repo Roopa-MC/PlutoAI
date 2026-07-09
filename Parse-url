@@ -1,0 +1,41 @@
+"""Fetch a URL and summarize its title and first paragraphs."""
+
+from urllib.parse import urlparse
+import requests
+from bs4 import BeautifulSoup
+
+URL = "https://medium.com/@ankitatechverse/run-n8n-locally-with-docker-in-5-minutes-free-easy-self-host-setup-df6740a939df"
+
+
+def fetch_html(url: str) -> str:
+    response = requests.get(url, timeout=15)
+    response.raise_for_status()
+    return response.text
+
+
+def summarize_html(html: str) -> str:
+    soup = BeautifulSoup(html, "html.parser")
+    title = soup.title.string.strip() if soup.title else "(No title found)"
+
+    paragraphs = [p.get_text(strip=True) for p in soup.find_all("p") if p.get_text(strip=True)]
+    summary_paragraphs = paragraphs[:3]
+
+    summary = [f"Title: {title}", "", "Summary:"]
+    summary.extend(summary_paragraphs)
+    return "\n".join(summary)
+
+
+def main() -> None:
+    parsed = urlparse(URL)
+    print(f"Parsing URL: {URL}")
+    print(f"Scheme: {parsed.scheme}")
+    print(f"Netloc: {parsed.netloc}")
+    print(f"Path: {parsed.path}")
+    print()
+
+    html = fetch_html(URL)
+    print(summarize_html(html))
+
+
+if __name__ == "__main__":
+    main()
