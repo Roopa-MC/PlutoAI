@@ -1,0 +1,11 @@
+Artificial Intelligence enables computers to perform tasks that normally require human intelligence.
+
+Large Language Models are trained on huge datasets.
+
+Embeddings convert text into vectors.
+
+Retrieval-Augmented Generation improves factual accuracy.
+
+Agentic AI systems can use tools.
+
+OpenAI develops GPT models.

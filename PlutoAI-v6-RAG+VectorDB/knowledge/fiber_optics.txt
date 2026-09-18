@@ -1,0 +1,152 @@
+================================================================================
+                    FIBRE OPTICS: THE FUNDAMENTALS
+                          A Two-Page Primer
+================================================================================
+
+
+1. WHAT AN OPTICAL FIBRE IS
+
+An optical fibre is a thin strand of ultra-pure glass that carries information
+as pulses of light. It has two concentric regions: a core of refractive index
+n1, and a cladding of slightly lower index n2. Light entering the core within
+a certain acceptance angle strikes the core-cladding boundary and is totally
+internally reflected, so it stays trapped in the core and follows the fibre
+even around bends.
+
+Standard telecom fibre has a core of about 9 micrometres and a cladding of
+125 micrometres - roughly the thickness of a human hair. A protective acrylate
+coating brings it to 250 micrometres. Everything beyond that (tubes, strength
+members, jacketing) is packaging that keeps the glass in a benign mechanical
+environment for thirty years or more.
+
+Two families exist:
+
+  Single-mode fibre (SMF). ~9 um core. Only one light path propagates, so
+  pulses stay sharp over long distances. All carrier outside-plant is SMF.
+
+  Multimode fibre (MMF). 50 or 62.5 um core. Many light paths propagate at
+  slightly different speeds, blurring pulses. Cheap transceivers, but reach is
+  limited to hundreds of metres. Used inside buildings and data centres.
+
+
+2. WHY IT BEAT COPPER
+
+Bandwidth. Light frequencies are enormous, so a single fibre can carry many
+terabits per second. A copper pair cannot approach this.
+
+Loss. Good fibre attenuates about 0.2 dB/km at 1550 nm. Signals travel 80-100
+km between amplifiers. Copper loss rises steeply with both frequency and
+distance, which is why DSL speed collapses over a few hundred metres.
+
+Immunity. Glass carries no current, so fibre is unaffected by electromagnetic
+interference, ground loops and lightning, and it emits nothing that can be
+picked up.
+
+Size and weight. One small cable replaces a large copper bundle - the original
+reason city carriers adopted fibre in the 1970s, when duct space, not
+bandwidth, was the binding constraint.
+
+Operating cost. Passive plant needs no power in the field and fails far less
+often than copper, which dominates the long-run economics.
+
+
+3. A SHORT HISTORY
+
+  1841-1854  Colladon, and later Tyndall, demonstrate light guided along a
+             falling water jet - total internal reflection in public view.
+  1954       Van Heel, Hopkins and Kapany add cladding to glass fibres, making
+             practical fibre bundles possible.
+  1966       Charles Kao argues that fibre loss is caused by impurities, not
+             by glass itself, and sets a 20 dB/km target. Nobel Prize, 2009.
+  1970       Corning produces fibre at 17 dB/km. The same year, semiconductor
+             lasers run continuously at room temperature. Source and medium
+             arrive together.
+  1977       First live telephone traffic over fibre, in California and the UK.
+  1987       The erbium-doped fibre amplifier is demonstrated, allowing optical
+             signals to be amplified without conversion to electrical form.
+  1990s      Wavelength division multiplexing: dozens of colours on one fibre,
+             all amplified by one EDFA. Cost per bit collapses.
+  2001       Speculative long-haul overbuild collapses, leaving large amounts
+             of unlit "dark fibre" in the ground.
+  2008 on    Coherent detection and digital signal processing push a single
+             wavelength from 10 Gbit/s to 100G, 400G, 800G and now 1.6 Tbit/s.
+  2000s on   Fibre reaches the home at scale, first in Japan and Korea, then
+             progressively across Europe and North America.
+
+
+4. THE PHYSICS THAT LIMITS A LINK
+
+Attenuation. Dominated by Rayleigh scattering off microscopic density
+variations frozen into the glass. It falls as wavelength rises, which is why
+telecom uses 1310 nm and 1550 nm rather than visible light. Splices,
+connectors and splitters add discrete loss on top.
+
+Chromatic dispersion. Different wavelengths travel at slightly different
+speeds, so a pulse spreads in time and eventually overlaps its neighbour.
+Standard fibre has near-zero chromatic dispersion at 1310 nm and about
+17 ps/(nm.km) at 1550 nm.
+
+Polarisation-mode dispersion. Small asymmetries in the core make the two
+polarisation states travel at different speeds. It varies with temperature and
+vibration, so it must be tracked dynamically rather than compensated once.
+
+Nonlinearity. Above a certain launch power, the refractive index of glass
+becomes intensity-dependent and channels begin to distort each other. This
+caps how much power can be launched, and therefore caps reach and capacity.
+
+Every design reduces to one inequality:
+
+    Transmit power - total loss - penalties  >=  receiver sensitivity + margin
+
+
+5. THE MAIN BUILDING BLOCKS
+
+  Transmitter    A laser diode, usually a distributed-feedback (DFB) type,
+                 modulated directly or by an external modulator.
+  Receiver       A PIN or avalanche photodiode converting light back to
+                 current. Coherent receivers instead mix the signal with a
+                 local laser to recover phase as well as amplitude.
+  Amplifier      EDFAs amplify a whole band of wavelengths optically, without
+                 decoding the signal. Raman amplifiers pump the transmission
+                 fibre itself.
+  Multiplexer    Combines many wavelengths onto one fibre (WDM). Dense WDM
+                 fits 80 or more channels into the C band alone.
+  ROADM          A switch that routes individual wavelengths between fibres
+                 under software control, without electrical conversion.
+  Splitter       A passive device that divides one fibre among many - the
+                 heart of a passive optical network. Needs no power.
+  Transceiver    A pluggable module (SFP, QSFP-DD, OSFP) combining transmitter
+                 and receiver in a standard form factor.
+
+
+6. HOW THE ACCESS NETWORK USES IT
+
+Most homes are connected by a passive optical network (PON), a tree topology:
+
+    Optical line terminal (OLT) in the exchange
+        -> feeder fibre
+            -> passive splitter (typically 1:32 or 1:64)
+                -> distribution fibre and drop
+                    -> optical network terminal (ONT) in the home
+
+Downstream, the OLT broadcasts to every ONT, and each device keeps only the
+frames addressed to it, with encryption providing privacy. Upstream, ONTs share
+the fibre by time-division multiple access: the OLT grants each one a
+transmission window, having first measured its distance so that bursts from
+near and far subscribers arrive without colliding.
+
+The economics work because the splitter is passive. One fibre and one OLT port
+are shared across dozens of homes, with no powered equipment between the
+exchange and the customer.
+
+Generations in service: GPON (2.5G down / 1.25G up), XGS-PON (10G symmetric),
+and now 50G PON. Each uses different wavelengths, so they coexist on the same
+glass and subscribers can be migrated one at a time without touching the
+outside plant. That property is the single most important reason fibre
+infrastructure holds its value: the electronics will be replaced several times
+over the life of the cable.
+
+
+================================================================================
+END
+================================================================================

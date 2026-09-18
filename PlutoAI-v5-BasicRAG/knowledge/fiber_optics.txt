@@ -1,0 +1,1831 @@
+================================================================================
+
+                    FIBRE OPTICS: A TECHNICAL REFERENCE
+         History, Physics, Architecture, Hardware, Software and
+                     Carrier Business Use Cases
+
+              Emphasis: Telecom Carrier and Access Networks
+                        Revision 1.0 - September 2026
+
+================================================================================
+
+
+TABLE OF CONTENTS
+
+  1.  Scope and How to Read This Document
+  2.  History and Industrial Evolution
+  3.  Physical Foundations
+  4.  Fibre Types, Cables and Standards
+  5.  Carrier Network Architecture
+  6.  The Access Network in Depth: PON and Point-to-Point
+  7.  Hardware
+  8.  Software, Control and Management
+  9.  Deployment, Test and Operations
+  10. Business Use Cases
+  11. Economics and Commercial Models
+  12. Standards Bodies and the Ecosystem
+  13. Technology Directions to 2030
+  14. Glossary
+  Appendix A. Quick Reference Tables
+
+
+================================================================================
+1. SCOPE AND HOW TO READ THIS DOCUMENT
+================================================================================
+
+This document is written for engineers who design, build, operate or make
+technology decisions about optical networks in a telecom service provider
+context. It assumes familiarity with digital communications and IP networking
+but does not assume a background in photonics.
+
+The weighting is deliberate. Roughly half the technical content concerns the
+carrier access and aggregation domain - passive optical networks, fibre-to-the-
+x topologies, optical distribution network engineering, and the hardware and
+software that terminate and manage them. Long-haul, submarine and data centre
+interconnect are covered because access networks do not exist in isolation and
+because the same component technologies increasingly cross domains, but they
+are treated as context rather than as the main subject.
+
+Numbers quoted for component performance, loss budgets and costs are
+representative industry figures intended for order-of-magnitude reasoning and
+architectural comparison. They are not a substitute for vendor datasheets,
+the applicable ITU-T or IEEE recommendation, or a link budget computed against
+the actual plant.
+
+A note on terminology: this document uses "fibre" in prose and "fiber" where it
+appears inside a standardised term or product name. ITU-T recommendations are
+cited by number; the recommendation text itself is authoritative.
+
+
+================================================================================
+2. HISTORY AND INDUSTRIAL EVOLUTION
+================================================================================
+
+2.1 Guided Light Before Glass Fibre
+
+The physical principle behind optical fibre - total internal reflection - was
+demonstrated publicly in 1841 by Daniel Colladon in Geneva, who showed that
+light injected into a jet of water falling from a tank would follow the curve
+of the jet rather than travelling straight. Jacques Babinet made related
+observations, and John Tyndall repeated the demonstration at the Royal
+Institution in 1854, which is why the effect is often attributed to him in
+English-language sources.
+
+Nineteenth-century engineers understood the principle but had neither a
+coherent light source nor a low-loss medium. Alexander Graham Bell's
+photophone of 1880 transmitted speech on a beam of sunlight modulated by a
+vibrating mirror, achieving a few hundred metres in clear air. Bell considered
+it his most important invention. It was also completely impractical: the
+atmosphere is a hostile transmission medium, and there was no way to store,
+switch or amplify the signal.
+
+The first practical uses of guided light were short-range and non-
+communications. In the 1920s Clarence Hansell and John Logie Baird
+independently proposed bundles of transparent rods for image transmission. In
+1954 Abraham van Heel in Delft and Harold Hopkins and Narinder Singh Kapany at
+Imperial College London published the decisive refinement: cladding the glass
+core with a lower-index material. Uncladded rods leaked light wherever they
+touched each other or a support; cladding confined the light and made bundles
+usable. The medical fibrescope followed, and with it the first commercial
+market for optical fibre.
+
+2.2 The 20 dB/km Threshold
+
+Losses in early fibre were of the order of 1000 dB/km. At that attenuation a
+signal is extinguished within metres. The medium was regarded as fundamentally
+unsuited to telecommunications.
+
+In July 1966 Charles Kao and George Hockham, working at Standard
+Telecommunication Laboratories in Harlow, England, published a paper arguing
+that the loss was not intrinsic to glass but was dominated by impurities -
+principally transition-metal ions such as iron, copper and chromium - and by
+manufacturing imperfections. They set a target: if attenuation could be brought
+below 20 dB/km, optical fibre would outperform coaxial cable for long-distance
+transmission. Kao then spent years travelling to glass manufacturers making the
+case for ultra-pure silica. He received the Nobel Prize in Physics in 2009.
+
+The target was met in 1970 by Robert Maurer, Donald Keck and Peter Schultz at
+Corning Glass Works, who produced a titanium-doped silica fibre at 17 dB/km.
+Within a few years germanium doping and improved vapour deposition processes
+brought attenuation to around 4 dB/km, and by the end of the decade to under
+1 dB/km. The same year, 1970, Zhores Alferov's group and Izuo Hayashi and
+Morton Panish at Bell Labs demonstrated semiconductor lasers capable of
+continuous-wave operation at room temperature. A practical source and a
+practical medium arrived simultaneously.
+
+2.3 Generations of Transmission Systems
+
+First generation (late 1970s). Multimode fibre at 850 nm, GaAlAs lasers or
+LEDs, around 45 Mbit/s, repeater spacing of roughly 10 km. General Telephone
+and Electronics carried live traffic in Long Beach, California in 1977; the UK
+Post Office ran a link near Martlesham the same year. The commercial case was
+made not by bandwidth but by duct congestion in cities, where fibre relieved
+physical space pressure that copper could not.
+
+Second generation (early 1980s). A shift to 1310 nm, where silica has a loss
+minimum around 0.5 dB/km and, critically, near-zero chromatic dispersion in
+standard fibre. Single-mode fibre displaced multimode for telecom use.
+Bit rates reached 1.7 Gbit/s with repeater spacing of 50 km.
+
+Third generation (mid to late 1980s). A shift to 1550 nm, the absolute loss
+minimum of silica at about 0.2 dB/km. This created a dispersion problem,
+because standard fibre has substantial chromatic dispersion at 1550 nm, which
+drove the development of dispersion-shifted fibre and of narrow-linewidth
+distributed-feedback lasers. Systems reached 2.5 Gbit/s over 100 km without
+repeaters.
+
+Fourth generation (1990s). Two innovations converged. The erbium-doped fibre
+amplifier, demonstrated at Southampton and Bell Labs in 1987, made it possible
+to amplify optical signals directly without converting to electrical form. And
+because the EDFA has gain across a band roughly 30 nm wide, it made wavelength
+division multiplexing economically compelling: one amplifier could carry dozens
+of channels. The cost-per-bit curve broke. Commercial WDM systems appeared in
+1995-96 with 8 and then 16 channels; by 2000, 80- and 160-channel dense WDM
+systems were shipping. The first transatlantic fibre cable, TAT-8, had entered
+service in 1988 with a capacity of 280 Mbit/s; within fifteen years single
+cables carried thousands of times that.
+
+The build-out became a speculative bubble. Between 1998 and 2001 carriers and
+new entrants laid enormous quantities of long-haul fibre on the assumption that
+internet traffic was doubling every three months. It was not. The collapse in
+2001 left large volumes of unlit "dark fibre" in the ground, bankrupted several
+carriers, and depressed optical component pricing for most of a decade. The
+overbuild had one lasting benefit: cheap long-haul capacity underwrote the
+first generation of large-scale content distribution and cloud services.
+
+Fifth generation (2008 onwards). Coherent detection returned. Direct-detection
+receivers discard optical phase; coherent receivers mix the incoming signal
+with a local oscillator laser and recover amplitude, phase and both
+polarisations. Combined with high-speed analogue-to-digital conversion and
+digital signal processing, this allowed chromatic dispersion and polarisation-
+mode dispersion to be compensated electronically rather than optically, and
+allowed higher-order modulation formats. 100 Gbit/s per wavelength using
+dual-polarisation QPSK became the long-haul standard from around 2010.
+Subsequent generations moved to 16QAM, 64QAM, probabilistic constellation
+shaping and baud rates above 100 Gbaud, reaching 800 Gbit/s and then
+1.6 Tbit/s per wavelength on commercial hardware.
+
+2.4 The Access Network Story
+
+Long-haul fibre economics worked from the start because cost is shared across
+enormous traffic volumes. The access network is the opposite: cost is borne per
+subscriber, and the subscriber's willingness to pay is bounded.
+
+Fibre-to-the-home therefore arrived late and unevenly. Japan led, with NTT
+launching commercial FTTH in 2001 and passing ten million subscribers by 2008,
+supported by government policy and by high urban density. South Korea followed
+a similar path. In the United States, Verizon's FiOS programme from 2004 was a
+large single-operator bet that competitors did not match; most US incumbents
+chose fibre-to-the-node with VDSL over the remaining copper. Europe fragmented:
+Sweden, Lithuania and Spain moved early, Germany and the UK much later,
+with the UK's large-scale full-fibre build only accelerating after 2018 under
+regulatory and altnet competitive pressure.
+
+The technology choice in access settled on the passive optical network. The
+alternative, point-to-point active Ethernet, gives each subscriber a dedicated
+fibre and a dedicated port. It is simpler and offers more capacity per user,
+and it dominates in parts of Scandinavia and in certain municipal builds, but
+it consumes far more fibre in the feeder and far more headend port capacity.
+PON shares one feeder fibre and one line-terminal port among typically 32 to 64
+subscribers using passive optical splitters that need no power, no cooling and
+no maintenance in the field. That economic argument has proved decisive at
+scale.
+
+PON itself evolved through a sequence of standards. APON and BPON (ITU-T G.983)
+in the late 1990s carried ATM cells at 155-622 Mbit/s and saw limited
+deployment. EPON (IEEE 802.3ah, 2004) carried native Ethernet at 1 Gbit/s
+symmetric and dominated in China, Japan and Korea. GPON (ITU-T G.984, 2003-04)
+offered 2.488 Gbit/s downstream and 1.244 Gbit/s upstream with an efficient
+framing layer, and became the global volume standard. XG-PON and then XGS-PON
+(ITU-T G.9807, 2016) took this to 10 Gbit/s, symmetric in the XGS variant, on
+new wavelengths that coexist with GPON on the same fibre plant. NG-PON2 (ITU-T
+G.989) specified tunable multi-wavelength TWDM operation; it found niche use in
+mobile transport but its optics cost prevented mass adoption. The industry
+then converged on 50G PON (ITU-T G.9804 series, first recommendations consented
+in April 2021) as the next mass-market step, with the G.9804.3 physical media
+dependent specification continuing to be amended through 2025-26 to add
+upstream options and coexistence wavelengths.
+
+2.5 Where the Industry Stands in 2026
+
+Several trends define the current period.
+
+Access is mid-migration. GPON remains the largest installed base but is
+capacity-constrained in dense markets; XGS-PON is the volume deployment choice
+for new builds and overlays; 50G PON has moved from trials into first
+commercial deployments, initially for business and high-value segments, with
+symmetric variants expected to follow.
+
+Coherent optics have become pluggable. What was a dedicated transponder shelf
+is now a module in a router faceplate. 400ZR and OpenZR+ made this ordinary;
+800ZR/ZR+ is shipping in volume and extending pluggable coherent from metro
+into regional and some long-haul applications, and OIF has published the
+1600ZR implementation agreement for 1.6 Tbit/s per wavelength.
+
+The demand mix has shifted. For two decades access bandwidth growth was driven
+by video streaming. The current marginal driver in transport and interconnect
+is AI infrastructure - training clusters, inference serving and the data centre
+interconnect between them - which has pulled hyperscalers into direct
+investment in fibre routes, hollow-core fibre manufacturing and optical
+switching in ways that reshape the supplier landscape carriers operate in.
+
+Fibre assets have been financialised. Infrastructure funds, network carve-outs
+and wholesale-only operators have separated the passive plant from the retail
+service in many markets, which changes how carriers plan, cost and compete.
+
+
+================================================================================
+3. PHYSICAL FOUNDATIONS
+================================================================================
+
+3.1 Guidance
+
+An optical fibre is a cylindrical dielectric waveguide: a core of refractive
+index n1 surrounded by a cladding of index n2, with n1 > n2 by a small margin,
+typically 0.3 to 1 percent. Light entering within the acceptance cone is
+confined by total internal reflection at the core-cladding boundary.
+
+The ray-optics picture is useful but incomplete. A full treatment solves
+Maxwell's equations for the cylindrical boundary conditions and yields discrete
+guided modes. The governing parameter is the normalised frequency, or V number:
+
+    V = (2 * pi * a / lambda) * sqrt(n1^2 - n2^2)
+
+where a is the core radius and lambda the free-space wavelength. For V < 2.405
+only the fundamental LP01 mode propagates and the fibre is single-mode. The
+quantity sqrt(n1^2 - n2^2) is the numerical aperture, which sets the acceptance
+angle and therefore how efficiently light can be coupled in.
+
+Single-mode fibre for telecom has a core diameter of about 8-10 micrometres and
+a cladding diameter of 125 micrometres. Multimode fibre has a 50 or 62.5
+micrometre core; it accepts far more light from cheap sources but suffers modal
+dispersion, which restricts it to short reach. Carrier outside-plant is
+essentially all single-mode. Multimode survives inside buildings, data centres
+and some intra-site applications where reach is under a few hundred metres and
+transceiver cost dominates.
+
+Mode field diameter matters more than core diameter in practice. It describes
+the actual radial extent of the optical field, which extends into the cladding.
+Splicing fibres with mismatched MFD produces loss even when the geometry looks
+correct - a common cause of unexplained splice loss when different fibre types
+meet at a joint.
+
+3.2 Attenuation
+
+Attenuation in dB/km is the primary budget constraint in any link. It comprises:
+
+Rayleigh scattering. Scattering from microscopic density fluctuations frozen
+into the glass during manufacture. It scales as 1/lambda^4, which is why longer
+wavelengths are preferred, and it is the dominant intrinsic loss mechanism
+across the telecom bands. It cannot be engineered away in solid silica; it sets
+the floor of about 0.14-0.15 dB/km at 1550 nm for the best conventional fibre.
+
+Infrared absorption. Silica's molecular vibrational absorption rises steeply
+beyond about 1600 nm and closes the long-wavelength end of the usable spectrum.
+
+Ultraviolet absorption. Electronic transitions, significant only at short
+wavelengths.
+
+OH- absorption. The hydroxyl ion produces a strong absorption peak near
+1383 nm. Legacy fibre has a pronounced "water peak" here. Low-water-peak fibre
+conforming to ITU-T G.652.D suppresses it, opening the E band for CWDM and for
+PON wavelength planning.
+
+Bending loss. Macrobending, where the fibre is coiled tighter than its minimum
+bend radius, and microbending, from lateral pressure on the coating. Both
+couple guided light into radiation modes. Bend loss rises sharply with
+wavelength, so a marginal bend can pass a 1310 nm test and fail at 1625 nm -
+which is exactly why 1625 or 1650 nm is used as the out-of-band monitoring
+wavelength on live PON plant.
+
+Splice, connector and component loss. Discrete rather than distributed, but
+budgeted the same way. Typical values: fusion splice 0.05-0.1 dB, mechanical
+splice 0.1-0.3 dB, connector pair 0.2-0.5 dB, 1:32 splitter about 17-18 dB
+including excess loss.
+
+3.3 Transmission Windows
+
+    Band   Name              Range (nm)     Typical carrier use
+    ----   ----------------  ------------   --------------------------------
+    O      Original          1260 - 1360    GPON/XGS-PON upstream, 50G PON,
+                                            short-reach grey optics
+    E      Extended          1360 - 1460    Requires low-water-peak fibre
+    S      Short             1460 - 1530    XGS-PON downstream, Raman pumps
+    C      Conventional      1530 - 1565    DWDM, EDFA gain band, coherent
+    L      Long              1565 - 1625    C+L band extension, DWDM
+    U      Ultra-long        1625 - 1675    Out-of-band monitoring (OTDR)
+
+The C band is the centre of gravity of the transport industry because it
+combines minimum loss with EDFA gain. C+L band systems roughly double usable
+spectrum at the cost of a second amplifier chain and additional Raman tilt
+management, and are now standard on high-capacity routes.
+
+3.4 Dispersion
+
+Dispersion spreads a pulse in time, causing intersymbol interference. Three
+forms matter.
+
+Modal dispersion exists only in multimode fibre: different modes travel
+different path lengths. Graded-index profiles reduce it substantially by making
+higher-order modes travel through lower-index regions at higher group velocity.
+It is the reason multimode reach is measured in hundreds of metres.
+
+Chromatic dispersion arises because refractive index varies with wavelength and
+because any modulated signal occupies finite spectral width. It is expressed in
+ps/(nm.km). Standard G.652 fibre has zero chromatic dispersion near 1310 nm and
+about +17 ps/(nm.km) at 1550 nm. Its impact scales with the square of the
+symbol rate, so it becomes the binding constraint quickly as rates increase.
+Historically it was managed with dispersion-compensating fibre modules, which
+added loss and latency. Coherent systems compensate it in the DSP, and modern
+lines are typically built without optical dispersion compensation at all.
+
+Polarisation-mode dispersion arises from residual asymmetry in the fibre core
+and from external stress. The two orthogonal polarisation states travel at
+slightly different velocities. PMD is stochastic, varies with temperature and
+mechanical disturbance, and accumulates with the square root of distance. It is
+quoted in ps/sqrt(km). Modern fibre achieves under 0.1 ps/sqrt(km); older
+installed fibre from the 1980s and early 1990s can be an order of magnitude
+worse and is frequently the limiting factor when carriers try to upgrade legacy
+routes to high baud rates. Coherent DSP tracks and compensates PMD dynamically,
+which is one of the main reasons coherent technology unlocked capacity on
+existing plant.
+
+3.5 Nonlinear Effects
+
+Above a certain launch power, silica's refractive index becomes intensity-
+dependent and the fibre stops behaving linearly. This sets the upper bound on
+optical signal-to-noise ratio and therefore on reach and spectral efficiency.
+
+Self-phase modulation: the pulse modulates its own phase, broadening its
+spectrum and interacting with chromatic dispersion.
+
+Cross-phase modulation: one WDM channel's intensity modulates the phase of its
+neighbours. It scales with channel count and is worse at tight channel spacing.
+
+Four-wave mixing: three waves generate a fourth at a new frequency. If that
+frequency lands on an occupied channel, it appears as interference. FWM is
+efficient when channels are equally spaced and dispersion is low - which is why
+dispersion-shifted fibre (G.653), designed to zero dispersion at 1550 nm,
+turned out to be a poor choice for DWDM and was largely abandoned. A small
+non-zero dispersion is beneficial because it destroys the phase matching FWM
+requires.
+
+Stimulated Raman scattering: energy transfers from shorter to longer
+wavelengths, producing gain tilt across a wide band. It is a problem in C+L
+systems and an exploitable resource in Raman amplifiers.
+
+Stimulated Brillouin scattering: interaction with acoustic phonons, generating
+a strong backward-propagating wave. It has a low threshold for narrowband
+signals and is mitigated by phase dithering the source.
+
+The practical consequence is the "nonlinear Shannon limit": increasing launch
+power improves OSNR up to a point, beyond which nonlinear penalties dominate
+and performance degrades. Optimising a line means finding that per-channel
+power, and it is why simply turning up the amplifiers does not extend reach.
+
+3.6 The Link Budget
+
+Every fibre design reduces to one inequality:
+
+    Transmit power (dBm) - Total loss (dB) - Penalties (dB)
+        >= Receiver sensitivity (dBm) + Margin (dB)
+
+Total loss sums fibre attenuation over distance, splice loss, connector loss,
+splitter loss and any passive filters. Penalties account for dispersion,
+crosstalk and reflections. Margin covers ageing, temperature variation, future
+repairs and re-splices - typically 3 dB in access plant, and worth defending
+in design reviews because it is the first thing sacrificed when a route is
+longer than planned.
+
+For an access engineer the loss budget is expressed as a PON optical power
+budget class. Class B+ gives 28 dB, Class C+ gives 32 dB, and Class D and
+extended budgets go further. The budget is consumed mostly by the splitter: a
+1:32 split costs about 17.5 dB before any fibre is traversed, and a 1:64 split
+about 20.5 dB. This is why split ratio, not distance, is usually the binding
+architectural constraint in urban FTTH.
+
+
+================================================================================
+4. FIBRE TYPES, CABLES AND STANDARDS
+================================================================================
+
+4.1 Single-Mode Fibre Categories
+
+G.652 - Standard single-mode fibre. Zero dispersion near 1310 nm. The .D
+variant is low-water-peak and is the default for essentially all new terrestrial
+and access construction. If a network document says "standard fibre" without
+qualification, it means G.652.D.
+
+G.653 - Dispersion-shifted fibre. Zero dispersion at 1550 nm. Deployed in the
+late 1980s, then found to be hostile to DWDM because of four-wave mixing.
+Significant installed base in Japan and parts of Italy; a constraint rather
+than an asset today.
+
+G.654 - Cut-off shifted fibre with large effective area and very low
+attenuation, around 0.16 dB/km. Originally a submarine fibre; the .E variant is
+now used for terrestrial long-haul where the larger effective area raises the
+nonlinear threshold and buys OSNR margin for high-order modulation.
+
+G.655 - Non-zero dispersion-shifted fibre. A small controlled dispersion at
+1550 nm, enough to suppress FWM while limiting accumulation. Widely deployed in
+long-haul during the late 1990s and 2000s. Coherent detection reduced its
+advantage, and new builds generally revert to G.652.D or G.654.E.
+
+G.656 - Non-zero dispersion for wideband transport across S, C and L bands.
+
+G.657 - Bend-insensitive single-mode fibre, the access workhorse. The .A1 and
+.A2 variants remain fully G.652.D compatible and splice to it without penalty;
+.B2 and .B3 tolerate bend radii down to 5 mm at the cost of full
+interoperability. Bend insensitivity is what makes in-building riser work,
+drop cable stapling and dense fibre management in street cabinets practical.
+
+4.2 Multimode Categories
+
+OM1 (62.5/125) and OM2 (50/125) are legacy. OM3, OM4 and OM5 are laser-
+optimised 50/125 fibres characterised by effective modal bandwidth: OM3 to
+300 m at 10 Gbit/s, OM4 to 400 m, OM5 adding wideband support for short-
+wavelength division multiplexing. Relevant to carriers mainly inside central
+offices, exchanges and data centres.
+
+4.3 Cable Construction
+
+The fibre is 125 micrometres of glass with a 250 micrometre acrylate coating.
+Everything else is packaging designed to keep the glass in a benign mechanical
+and chemical environment for 25-40 years.
+
+Loose tube. Fibres float in gel-filled or dry-blocked tubes stranded around a
+central strength member. Thermal expansion and cable strain are absorbed by the
+tube, not the fibre. The standard outside-plant construction for duct and
+aerial.
+
+Ribbon. Twelve or more fibres bonded in a flat array, allowing mass fusion
+splicing of an entire ribbon in one operation. Essential for very high fibre
+counts. Rollable or "intermittently bonded" ribbon flexes into a round
+cross-section and has become the dominant choice for high-density urban and
+data centre routes, supporting 1728, 3456 and higher fibre counts in ducts
+sized for far less.
+
+Micro-duct and blown fibre. Small-diameter cables installed by air-assisted
+blowing into pre-laid micro-ducts. Reduces civil works, enables incremental
+build, and is central to modern FTTH deployment economics.
+
+Aerial. ADSS (all-dielectric self-supporting) for spans between poles with no
+metallic elements - important where the cable shares structure with power
+conductors. OPGW (optical ground wire) integrates fibres into the earth
+conductor of a transmission line and is how many utility fibre networks came
+into existence.
+
+Drop cable. The final span to the subscriber. Flat, small, bend-insensitive
+G.657, often with a pre-connectorised end to eliminate field splicing on the
+most cost-sensitive part of the build.
+
+4.4 Connectors and Terminations
+
+Connector loss and reflectance both matter; reflectance matters more than
+engineers new to optics expect, because reflections destabilise lasers and
+degrade high-order modulation.
+
+Polish types: PC (physical contact, around -40 dB return loss), UPC (ultra
+physical contact, around -50 dB), APC (angled physical contact, 8 degree angle,
+better than -60 dB). PON plant is APC throughout, because the RF video overlay
+and the burst-mode upstream are both intolerant of reflections. Mating an APC
+to a UPC connector damages both ferrules and produces high loss - a recurring
+field failure.
+
+Form factors: SC (still the access standard, especially SC/APC), LC (duplex,
+the transport and data centre standard), MPO/MTP (multi-fibre, 12 to 24 fibres,
+used for parallel optics and high-density patching), and field-installable
+mechanical connectors for drop terminations.
+
+
+================================================================================
+5. CARRIER NETWORK ARCHITECTURE
+================================================================================
+
+5.1 The Layered View
+
+A carrier optical network is conventionally decomposed into layers, and
+confusion in design discussions almost always traces to people speaking about
+different layers without saying so.
+
+Layer 0 - the optical or photonic layer. Fibre, amplifiers, wavelength
+multiplexers, ROADMs. Deals in wavelengths and analogue optical performance:
+power, OSNR, dispersion, nonlinearity.
+
+Layer 1 - the digital transport layer. OTN (ITU-T G.709), providing
+containerised transport with forward error correction, tandem connection
+monitoring and deterministic multiplexing. In some architectures Ethernet is
+carried directly over the wavelength and Layer 1 collapses into the transceiver.
+
+Layer 2 - Ethernet, including carrier Ethernet services defined by MEF, VLAN
+and PBB structures, and segment routing constructs where used.
+
+Layer 3 - IP/MPLS routing.
+
+The decades-long architectural argument is how much function to place in each
+layer. The "IP over DWDM" position holds that OTN is redundant overhead when
+routers can host coherent pluggables and drive wavelengths directly. The
+transport position holds that OTN provides multiplexing efficiency, hard
+service isolation, and an operational demarcation that survives router
+software failures and organisational boundaries. In practice large carriers run
+hybrids, and the balance has shifted towards IP over DWDM as pluggable coherent
+matured.
+
+5.2 Domains
+
+Access. From the subscriber to the first aggregation point. Dominated by PON
+and point-to-point Ethernet. Distances typically 1-20 km. Cost per subscriber
+is the governing metric.
+
+Aggregation and metro. Rings or partial meshes connecting access nodes to metro
+core sites. 10-100 km spans. Increasingly coherent, with 100G/400G pluggables
+replacing grey optics and dedicated transponders. This is where mobile
+transport, business services and residential backhaul converge onto common
+infrastructure.
+
+Regional and long-haul core. 100-2000+ km. C or C+L band DWDM with EDFA and
+Raman amplification, ROADM nodes, coherent transponders or high-performance
+pluggables at 400G to 1.6T per wavelength.
+
+Submarine. Repeatered systems with undersea EDFAs powered over a copper
+conductor in the cable, spaced 50-100 km, with the shore-side power feed
+equipment providing several thousand volts. Space-division multiplexed designs
+with many fibre pairs at moderate per-pair capacity have become preferred to
+fewer pairs at maximum capacity, because the binding constraint is electrical
+power delivered to the repeaters, not spectral efficiency.
+
+Data centre interconnect. Short, extremely high capacity, latency- and
+power-sensitive. The domain where pluggable coherent first displaced
+transponders, and the one currently growing fastest under AI workloads.
+
+5.3 Topologies and Protection
+
+Point-to-point is the simplest and least resilient. A single fibre cut takes
+the service down.
+
+Ring topologies dominate metro and aggregation because they provide a second
+path with modest incremental fibre. Protection can be at the optical layer
+(optical line protection switching, typically 50 ms), at the OTN layer
+(SNCP/subnetwork connection protection), at Layer 2, or at Layer 3. Carriers
+must avoid stacking protection mechanisms that race each other: a well-known
+operational failure mode is optical protection and IP fast-reroute both firing
+on the same event and producing extended instability.
+
+Mesh topologies are the norm in the core. Restoration is computed rather than
+pre-provisioned - a controller finds a new path and re-tunes wavelengths after
+a failure. This trades restoration time (seconds rather than milliseconds) for
+much better capacity efficiency, because spare capacity is shared across many
+failure scenarios rather than dedicated per circuit. Colourless, directionless
+and contentionless ROADM architectures exist specifically to make this possible.
+
+In the access network, protection is usually absent for residential service -
+the drop and the distribution fibre are single points of failure and the
+economics do not support duplicating them. Business and mobile transport
+services over PON can be protected using Type B protection (redundant feeder
+fibre and OLT port, shared splitter) or Type C (fully duplicated path to the
+ONU). Type B is the common compromise, protecting the shared segment where a
+failure would affect many customers.
+
+5.4 Wavelength Planning
+
+Fixed grid: ITU-T G.694.1 defines a 50 GHz (and legacy 100 GHz) grid anchored
+at 193.1 THz. Simple, and adequate while all channels were the same width.
+
+Flexible grid: also G.694.1, defining 12.5 GHz granularity so that a channel
+can occupy the spectrum it actually needs. Necessary once 400G and 800G signals
+at high baud rates exceeded 50 GHz. Introduces spectrum fragmentation as a
+planning problem analogous to memory fragmentation, which is one of the
+practical drivers for controller-based path computation.
+
+Coarse WDM (G.694.2) uses 20 nm spacing across 1270-1610 nm, requiring only
+uncooled lasers. Cheap, low channel count, and still widely used for mobile
+fronthaul and business access where 8-16 channels suffice.
+
+5.5 Mobile Transport: Fronthaul, Midhaul, Backhaul
+
+The disaggregation of the radio access network into radio unit, distributed
+unit and centralised unit created new transport segments with sharply different
+requirements, and made optical access engineering directly relevant to mobile
+network design.
+
+Fronthaul carries the eCPRI or CPRI interface between the radio unit and the
+distributed unit. It is the most demanding segment: latency budget of roughly
+100 microseconds one way, which limits distance to about 20 km; bandwidth of
+several gigabits to tens of gigabits per radio; and stringent synchronisation.
+Options include dedicated dark fibre, CWDM or DWDM over a shared fibre,
+point-to-point 25 Gbit/s grey optics, and increasingly PON-based fronthaul
+where a 25G or 50G PON carries fronthaul alongside residential traffic using
+cooperative dynamic bandwidth assignment to protect the latency budget.
+
+Midhaul connects distributed unit to centralised unit. Latency budget in the
+low milliseconds, considerably more relaxed.
+
+Backhaul connects to the core. Conventional IP transport requirements, with
+capacity per site now commonly 10 Gbit/s and rising.
+
+Synchronisation deserves separate attention. Time-division duplex 5G requires
+phase alignment typically within 1.5 microseconds relative to a common
+reference, and some coordinated features demand tighter. This is delivered
+using Precision Time Protocol (IEEE 1588v2) with telecom profiles G.8275.1 or
+G.8275.2, and Synchronous Ethernet (G.8262) for frequency. Every optical node
+in the chain must either be PTP-aware or have deterministic, symmetric delay.
+Asymmetric paths - different fibre lengths in each direction, or unidirectional
+amplifiers - introduce time error that is difficult to diagnose after the fact.
+This is a frequent source of field problems when transport teams and radio
+teams do not coordinate.
+
+
+================================================================================
+6. THE ACCESS NETWORK IN DEPTH: PON AND POINT-TO-POINT
+================================================================================
+
+6.1 FTTx Taxonomy
+
+    FTTH   Fibre to the home       Fibre terminates inside the dwelling
+    FTTB   Fibre to the building   Terminates in the basement; copper or
+                                   in-building Ethernet/G.fast to units
+    FTTC   Fibre to the cabinet    Street cabinet, VDSL2 over the last 300 m
+    FTTN   Fibre to the node       Larger node, longer copper tail
+    FTTdp  Fibre to the distribution point  Very short copper, G.fast
+    FTTP   Fibre to the premises   Generic; covers FTTH and FTTB
+
+The industry has converged on FTTH/FTTP for new build because copper-tail
+architectures require active powered cabinets in the field, which carry
+recurring power, battery, maintenance and site-rental costs, and because their
+capacity ceiling arrives quickly.
+
+6.2 PON Principle of Operation
+
+A PON is a point-to-multipoint tree. The optical line terminal sits in the
+central office or a remote node. A feeder fibre runs to one or more passive
+optical splitters, which divide the signal among distribution fibres, each
+ending at an optical network unit or optical network terminal at the customer.
+
+Downstream is a broadcast. The OLT transmits continuously; every ONU receives
+every frame and discards those not addressed to it. Confidentiality is provided
+by AES encryption keyed per ONU.
+
+Upstream is time-division multiple access. Only one ONU may transmit at any
+instant, or the bursts collide at the splitter. The OLT grants each ONU
+transmission windows. Because ONUs are at different distances, their signals
+would arrive at different times and with different power levels, so two
+mechanisms are essential:
+
+Ranging. During activation the OLT measures round-trip delay to each ONU and
+assigns an equalisation delay so that all ONUs appear equidistant. This is why
+PON standards specify a maximum differential distance (typically 20 km) as well
+as a maximum reach.
+
+Burst-mode reception. The OLT receiver must lock onto each burst's amplitude
+and clock phase within a few hundred nanoseconds, across a dynamic range of
+15-20 dB between near and far ONUs. Burst-mode receiver design is one of the
+genuinely hard engineering problems in PON and a significant part of OLT cost.
+
+Dynamic bandwidth assignment allocates upstream capacity. Status-reporting DBA
+uses ONU queue reports; non-status-reporting DBA infers demand from idle
+patterns. Service level agreements are expressed as T-CONT types: fixed,
+assured, non-assured and best-effort bandwidth, composed to create business and
+residential product tiers on the same PON.
+
+6.3 Generational Comparison
+
+    Standard      Spec         Down      Up        Wavelengths (nm)
+    ---------     ---------    -------   -------   --------------------------
+    GPON          G.984        2.488G    1.244G    D 1490, U 1310
+    EPON          802.3ah      1.25G     1.25G     D 1490, U 1310
+    10G-EPON      802.3av      10G       1G/10G    D 1577, U 1270
+    XG-PON1       G.987        10G       2.5G      D 1577, U 1270
+    XGS-PON       G.9807       10G       10G       D 1577, U 1270
+    NG-PON2       G.989        4x10G     4x10G     Tunable, 1596-1603 down
+    25GS-PON      MSA          25G       25G       D 1358, U 1290 (typical)
+    50G PON       G.9804       50G       25G/50G   D 1342, U 1290/1300 region
+    -----------------------------------------------------------------------
+    RF video overlay, where present, occupies 1550-1560 nm
+
+Coexistence is the central deployment consideration. GPON, XGS-PON and an RF
+video overlay can share the same fibre plant simultaneously via a wavelength
+coexistence element at the OLT, allowing subscriber-by-subscriber migration
+without re-engineering the outside plant. The wavelength plan for 50G PON has
+been the subject of extended standards work precisely because the O band is
+crowded and triple coexistence with both GPON and XGS-PON is commercially
+important to operators with mixed installed bases.
+
+6.4 The Optical Distribution Network
+
+The ODN is the passive plant: feeder fibre, splitters, distribution fibre,
+drops, and the closures, cabinets and terminals that house them. It represents
+70-80 percent of the capital cost of an FTTH build and has a design life of
+30 years or more. Active equipment will be replaced two or three times over
+the life of the ODN, so ODN design decisions are the most consequential and
+least reversible in access engineering.
+
+Split architecture choices:
+
+Centralised splitting. A single split stage, usually at the central office or
+in a large street cabinet. Simplifies operations and testing, maximises
+flexibility in assigning subscribers to OLT ports, and makes it easy to change
+split ratios later. Consumes more distribution fibre.
+
+Distributed or cascaded splitting. Two or more stages, for example 1:4 in a
+cabinet and 1:8 in a closure near the customer. Minimises fibre in the
+distribution segment and is cheaper in low-density areas. Harder to test,
+because an OTRD trace beyond the first splitter cannot distinguish branches.
+
+Split ratio selection. 1:32 and 1:64 are the common choices. The trade-off is
+direct: a higher split ratio shares the OLT port and feeder fibre across more
+subscribers, lowering cost per home, but reduces both the optical power budget
+and the average bandwidth available per subscriber. With XGS-PON, a 1:64 split
+gives a nominal 156 Mbit/s per subscriber if all transmit simultaneously, which
+is acceptable given real-world concurrency but constrains gigabit product
+marketing. Business and mobile transport services typically justify lower split
+ratios or dedicated wavelengths.
+
+A worked power budget for XGS-PON Class N1 (29 dB budget), 1:32 centralised
+split, 8 km reach:
+
+    Feeder + distribution fibre, 8 km at 0.35 dB/km (1310 nm)   2.8 dB
+    1:32 splitter including excess loss                        17.5 dB
+    Connectors, 6 pairs at 0.3 dB                               1.8 dB
+    Splices, 8 at 0.1 dB                                        0.8 dB
+    Coexistence element                                         1.0 dB
+    ------------------------------------------------------------------
+    Total                                                      23.9 dB
+    Budget                                                     29.0 dB
+    Remaining margin                                            5.1 dB
+
+The margin looks comfortable, but note that at 1:64 the splitter alone costs
+about 20.5 dB and the same route leaves under 2 dB - below the 3 dB repair
+allowance most operators mandate. This single calculation drives most urban
+split-ratio policy.
+
+6.5 Point-to-Point Active Ethernet
+
+Each subscriber gets a dedicated fibre to an Ethernet aggregation switch. It
+offers full dedicated bandwidth, simple troubleshooting, clean unbundling at
+the fibre level, and no shared-medium security considerations. It costs
+substantially more in feeder fibre count, in central office space, and in port
+count and power. It remains the architecture of choice in parts of Sweden and
+the Netherlands, in some municipal networks, and for enterprise and mobile
+sites even within PON-based operators.
+
+Regulatory context matters here. In markets where wholesale access is mandated
+at the physical layer, point-to-point makes fibre unbundling straightforward.
+Where wholesale is provided as a bitstream service, PON is sufficient. National
+regulatory choices have therefore shaped architecture as much as engineering
+economics has.
+
+6.6 PON for Business and Transport
+
+PON is no longer a residential-only technology. Carriers use it for:
+
+Small and medium business connectivity, with symmetric XGS-PON delivering
+service levels previously requiring dedicated fibre at a fraction of the cost.
+
+Mobile xHaul, using dedicated T-CONTs, low-latency DBA and PTP-aware ONUs to
+carry midhaul and, with careful engineering, fronthaul.
+
+Wholesale and open access, where the PON operator sells a bitstream product to
+retail service providers.
+
+Multi-tenant and campus networks, replacing in-building Ethernet switch
+hierarchies with passive splitters - lower power, less space, longer reach, at
+the cost of a different operational model.
+
+
+================================================================================
+7. HARDWARE
+================================================================================
+
+7.1 Sources
+
+Fabry-Perot laser diode. Multi-longitudinal-mode, broad spectrum, cheap.
+Adequate for short reach at low rates. Used in legacy ONU upstream transmitters.
+
+Distributed feedback (DFB) laser. An internal Bragg grating selects a single
+longitudinal mode, giving narrow linewidth and side-mode suppression above
+35 dB. The workhorse for PON, CWDM and grey optics.
+
+Distributed Bragg reflector and tunable lasers. Tunable across the C band,
+required for NG-PON2 ONUs, for colourless ROADM architectures and for coherent
+transponders where the same module must be provisioned to any channel. Tunable
+optics cost was the principal reason NG-PON2 failed to reach mass market.
+
+External cavity and integrable tunable laser assemblies (ITLA). Very narrow
+linewidth, typically under 100 kHz, required as both signal source and local
+oscillator in coherent systems. Linewidth directly limits achievable modulation
+order: 64QAM demands far more phase stability than QPSK.
+
+Vertical-cavity surface-emitting lasers (VCSEL). Emit perpendicular to the
+wafer surface, enabling on-wafer testing and very low cost. Dominant in
+multimode short reach; long-wavelength VCSELs have made inroads into
+single-mode access.
+
+Modulation. Direct modulation - varying the drive current - is cheap but
+produces chirp, a dynamic wavelength shift that interacts badly with chromatic
+dispersion. External modulation using an electro-absorption modulator
+(compact, integrable, moderate performance) or a Mach-Zehnder modulator in
+lithium niobate, indium phosphide or thin-film lithium niobate (high
+performance, required for coherent and high baud rates) avoids chirp and
+enables arbitrary complex constellations.
+
+7.2 Detectors and Receivers
+
+PIN photodiode. Simple, robust, no internal gain. Used where power is adequate.
+
+Avalanche photodiode (APD). Internal multiplication gain of 10-20, improving
+sensitivity by 5-10 dB at the cost of excess noise, temperature-dependent bias
+and higher price. Standard in PON OLT and ONU receivers where the power budget
+is tight.
+
+Burst-mode receiver. An OLT-specific APD front end with fast automatic gain
+control and clock and data recovery that settles within the preamble of each
+upstream burst. Its dynamic range determines how much near-far power difference
+the PON can tolerate.
+
+Coherent receiver. A 90-degree optical hybrid mixes signal and local oscillator
+to produce in-phase and quadrature components for both polarisations, feeding
+four balanced photodiode pairs and four high-speed ADCs. Everything after that
+is digital signal processing: chromatic dispersion compensation, polarisation
+demultiplexing and PMD tracking via adaptive equalisation, carrier frequency
+and phase recovery, symbol decision, and soft-decision forward error correction.
+The DSP ASIC is the most complex and valuable component in modern optical
+transport, and its process node and power envelope largely determine what form
+factor a given capacity can fit into.
+
+7.3 Amplification
+
+Erbium-doped fibre amplifier (EDFA). A length of erbium-doped fibre pumped at
+980 nm or 1480 nm. Provides 20-30 dB of gain across the C band with a noise
+figure around 4-5 dB. It amplifies all wavelengths simultaneously and is
+transparent to bit rate and modulation format - the property that made DWDM
+economic. Variants include L-band EDFAs, gain-flattened designs, and
+gain-clamped amplifiers that hold per-channel power stable as channels are
+added or dropped.
+
+Raman amplifier. Pumps the transmission fibre itself at a wavelength about
+100 nm below the signal, producing distributed gain along the span rather than
+lumped gain at a node. Because amplification occurs before the signal has fully
+decayed, effective noise figure is better - sometimes quoted as negative when
+referred to an equivalent lumped amplifier. Used to extend spans, in
+high-capacity and submarine systems, and to manage C+L tilt. Requires high pump
+power and careful safety interlocking.
+
+Semiconductor optical amplifier (SOA). Compact and integrable, with fast gain
+dynamics that cause crosstalk in WDM but are useful for switching and for burst
+applications. Increasingly used in PON to extend reach and split ratio, and in
+integrated photonic circuits.
+
+Optical amplifiers do not regenerate: they amplify noise along with signal and
+add amplified spontaneous emission. OSNR degrades monotonically along an
+amplified chain, and the number of spans is bounded by the receiver's required
+OSNR. Regeneration - optical-electrical-optical conversion - resets the budget
+but is expensive in cost, power and latency, which is why coherent's OSNR
+tolerance translates directly into fewer regenerator sites and lower operating
+cost.
+
+7.4 Multiplexing, Filtering and Switching
+
+Arrayed waveguide grating (AWG). A planar device that separates or combines
+wavelengths using a phased array of waveguides. The standard passive
+multiplexer for DWDM and the core of many PON coexistence elements.
+
+Thin-film filters. Cascaded dielectric filters for CWDM and low-channel-count
+applications. Cheap and stable.
+
+Wavelength selective switch (WSS). The heart of a ROADM. Using liquid crystal
+on silicon or MEMS micromirrors, a WSS routes any wavelength - or, in flexible
+grid designs, any spectral slice - from any input port to any output port, and
+applies per-channel attenuation for power equalisation. A 1xN WSS with N of 9
+to 32 is typical.
+
+ROADM architecture terminology, which is worth being precise about because it
+determines what the network can do without a truck roll:
+
+  Colourless      Any add/drop port can carry any wavelength (tunable optics,
+                  no fixed filter per port).
+  Directionless   Any add/drop port can be routed towards any line direction.
+  Contentionless  Two channels on the same wavelength can be added on
+                  different directions from the same add/drop structure.
+  Gridless        Supports flexible grid spectral allocation.
+
+A CDC-F ROADM (colourless, directionless, contentionless, flexible grid) allows
+a controller to establish or restore a wavelength between any two nodes purely
+in software. It costs more per node than a fixed or directional design, and the
+business case rests on restoration efficiency and on service velocity rather
+than on first-install cost.
+
+Optical circuit switching, historically confined to fibre-level patch
+automation, has re-entered mainstream discussion through AI data centre
+topologies, where reconfigurable optical interconnect between accelerator
+clusters offers power savings over electrical switching.
+
+7.5 Transceivers and Form Factors
+
+The industry has moved decisively from embedded, vendor-specific line cards to
+standardised pluggable modules.
+
+    Form factor   Typical capacity        Notes
+    -----------   --------------------    ------------------------------
+    SFP           155M - 1G               Legacy access, PON ONU
+    SFP+          10G                     XGS-PON, grey optics
+    SFP28         25G                     Fronthaul, 25G PON
+    QSFP28        100G                    4x25G lanes
+    QSFP-DD       400G, 800G              8 lanes; hosts 400ZR/ZR+
+    OSFP          400G, 800G, 1.6T        Better thermal envelope
+    CFP2-DCO      100G - 400G coherent    Digital coherent optics
+    OSFP-XD /     1.6T                    Emerging high-density
+      QSFP-DD800
+
+The significant architectural shift is coherent-in-a-pluggable. OIF's 400ZR
+implementation agreement defined a 400 Gbit/s coherent interface that fits a
+QSFP-DD and runs on data centre power budgets, targeting unamplified and
+amplified DCI reach. OpenZR+ extended reach and added OTN framing options.
+800ZR and ZR+ followed and are now shipping in volume, extending pluggable
+coherent beyond metro into regional and selected long-haul applications, and
+OIF has published the 1600ZR implementation agreement taking a single
+wavelength to 1.6 Tbit/s.
+
+The consequence for carriers is structural. A coherent pluggable in a router
+port removes a transponder shelf, its chassis, its power, its rack space and
+its management system. It also removes a demarcation point, merges two
+operational domains that in many carriers are separate departments with
+separate tools and separate fault processes, and creates multi-vendor
+interoperability questions at the optical layer that the OTN-based model
+avoided. The technology decision is straightforward; the organisational one is
+usually not.
+
+7.6 Access Node Hardware
+
+Optical line terminal (OLT). A chassis or pizza-box platform hosting PON line
+cards, uplink cards and switching fabric. Key selection criteria: PON ports per
+card and per chassis, supported PON generations on the same card, per-port and
+aggregate throughput, uplink capacity (increasingly 100G and 400G), DBA
+behaviour under load, power and cooling per subscriber, and support for
+disaggregated software models. The distinction between chassis-based OLTs in
+central offices and temperature-hardened remote OLTs in cabinets or even on
+poles is increasingly important as operators push fibre deeper.
+
+Optical network terminal/unit (ONT/ONU). The subscriber device. Ranges from a
+simple single-port bridge to an integrated gateway with Wi-Fi 6E or Wi-Fi 7,
+voice ports and routing. Important considerations are management model (OMCI,
+plus TR-069 or the newer TR-369/USP for the gateway function), power
+consumption at scale, and forward compatibility with the next PON generation.
+
+Passive splitters. Planar lightwave circuit splitters are the standard,
+providing even split across all ports; fused biconical taper splitters allow
+uneven ratios for tapping architectures. Splitters are often the only component
+in the ODN that engineers have latitude to re-specify late in the design.
+
+Enclosures. Joint closures, fibre distribution hubs, street cabinets, building
+entry terminals and customer terminals. Unglamorous, and the source of a
+disproportionate share of field faults through water ingress, poor bend
+management and incorrect re-entry during subsequent works.
+
+7.7 Test and Measurement
+
+Optical time domain reflectometer (OTDR). Launches a pulse and measures
+backscatter and reflection against time, producing a distance-resolved trace of
+the fibre. Locates breaks, high-loss splices and reflective events. On PON
+plant, an OTDR launched from the OLT side cannot resolve individual branches
+beyond a splitter, because all branches overlay in the same time window. This
+is addressed by testing from the subscriber side, by using reflective
+terminations with distinguishable signatures, or by embedded monitoring at
+1650 nm using filtered WDM couplers that keep the test wavelength out of the
+service bands.
+
+Optical power meter and light source. The basic insertion-loss measurement.
+Bidirectional loss testing is the acceptance standard for new plant.
+
+Optical spectrum analyser. Channel power, OSNR, wavelength accuracy. Essential
+for DWDM commissioning.
+
+Fusion splicer. Core-alignment splicers achieve 0.02-0.05 dB routinely; ribbon
+splicers handle 12 fibres at once. Splice quality is the most common variable
+between a plant that meets budget and one that does not.
+
+Fibre inspection scope. Video microscopy of connector end faces against
+IEC 61300-3-35 cleanliness grades. Contamination on connectors is, by a
+significant margin, the most common cause of optical faults in service. Any
+disciplined operations practice inspects before every mating.
+
+
+================================================================================
+8. SOFTWARE, CONTROL AND MANAGEMENT
+================================================================================
+
+8.1 The Management Stack
+
+    Business support systems (BSS)
+      Billing, ordering, product catalogue, customer records
+    ------------------------------------------------------------
+    Operations support systems (OSS)
+      Inventory, service activation and fulfilment, assurance,
+      workforce management, GIS and outside plant records
+    ------------------------------------------------------------
+    Domain orchestration / SDN controller
+      Multi-vendor path computation, service provisioning,
+      restoration, policy
+    ------------------------------------------------------------
+    Element / network management system (EMS/NMS)
+      Vendor-specific configuration, alarms, performance
+    ------------------------------------------------------------
+    Network elements
+      OLT, ONU, ROADM, amplifier, transponder
+
+Historically each vendor supplied a proprietary EMS, and a carrier with three
+optical vendors ran three management silos with three fault workflows. The
+sustained industry effort of the last decade has been to push standardised,
+model-driven interfaces down to the element so that a single controller can
+manage a heterogeneous network.
+
+8.2 Model-Driven Networking
+
+NETCONF (RFC 6241) and the newer RESTCONF provide transaction-oriented
+configuration with candidate datastores, commit and rollback semantics - a
+meaningful improvement over SNMP and CLI scraping, which offered no
+transactionality. gNMI, from the OpenConfig community, provides efficient
+streaming telemetry and configuration over gRPC.
+
+YANG (RFC 7950) is the data modelling language. The competing model ecosystems
+matter in procurement:
+
+  OpenConfig      Operator-authored, vendor-neutral, strong in IP and
+                  increasingly in optical terminal devices.
+  OpenROADM       An operator-led MSA defining interoperable ROADM, pluggable
+                  and transponder models plus optical specifications, so that
+                  equipment from different vendors interworks on one line
+                  system.
+  ONF TAPI        Transport API - a northbound interface abstracting an optical
+                  domain to an orchestrator as topology, connectivity and
+                  path computation services.
+  IETF models     ietf-te-topology, ietf-optical-impairment-topology and
+                  related models for the ACTN framework.
+  BBF models      Access-specific: cloud CO, disaggregated OLT, PON management.
+
+Telemetry has shifted from polled SNMP counters at five-minute intervals to
+streaming subscriptions at sub-second granularity. This changes what is
+analytically possible: pre-FEC bit error rate, received optical power and
+polarisation state sampled continuously allow degradation to be detected before
+it causes an alarm.
+
+8.3 SDN in the Optical Domain
+
+The optical layer resisted SDN longer than the packet layer, for a physical
+reason: a wavelength path is not merely a logical construct. Whether it works
+depends on OSNR, accumulated dispersion, filter narrowing at each ROADM,
+nonlinear penalty and the modulation format chosen. A controller that computes
+paths without a physical impairment model will provision circuits that do not
+come up.
+
+Modern optical controllers therefore incorporate a physical layer model - often
+based on the open-source GNPy library from the Telecom Infra Project - to
+perform impairment-aware routing, modulation and spectrum assignment. The
+controller answers not "is there a free channel" but "is there a free channel
+on which 800G 64QAM will close with adequate margin, and if not, will 400G
+16QAM close instead".
+
+Capabilities this enables: automated wavelength provisioning in minutes rather
+than weeks; mesh restoration computed after failure instead of pre-provisioned;
+margin harvesting, where links initially provisioned conservatively are
+upgraded to higher modulation orders once real performance data accumulates;
+and multi-layer optimisation, where IP topology and optical topology are
+planned together rather than sequentially.
+
+8.4 Disaggregation
+
+Three related but distinct movements:
+
+Hardware/software disaggregation at the network element. The SDN-enabled
+Broadband Access (SEBA) and Virtual OLT Hardware Abstraction (VOLTHA) projects,
+originating in ONF and continued through operator communities, define a model
+where a white-box OLT runs standardised software and is controlled through an
+abstraction layer, allowing the OLT hardware and the management software to be
+sourced separately. Telecom Infra Project's work on disaggregated access and
+transport pursues similar ends.
+
+Optical line system disaggregation. Separating the open line system - fibre,
+amplifiers, ROADMs - from the transponders that light it, so that a carrier can
+introduce a new generation of coherent optics without replacing the line
+system, and can source them from different vendors. This is the model that
+pluggable coherent makes natural, and it is where OpenROADM and OpenConfig
+terminal models earn their keep.
+
+Cloud central office. Re-hosting broadband network gateway, subscriber
+management and related functions as software on commodity compute in edge data
+centres rather than on purpose-built chassis. Combines with access node
+disaggregation to turn the central office into a small cloud site.
+
+Disaggregation transfers integration risk from the vendor to the operator.
+Carriers that have succeeded with it invested substantially in internal systems
+engineering, test automation and lab capability. Those that treated it purely
+as a procurement lever generally did not achieve the savings they modelled.
+
+8.5 Access-Specific Management
+
+ONU Management and Control Interface (OMCI, ITU-T G.988) is the in-band
+protocol by which the OLT configures and monitors the ONU - service profiles,
+VLANs, T-CONTs, GEM ports, performance counters and alarms. It is
+comprehensive, deeply structured, and a frequent source of interoperability
+friction: two vendors can both be compliant and still fail to interwork because
+they model a service differently within the permitted freedom of the standard.
+Broadband Forum TR-247 and TR-255 conformance testing exists specifically to
+reduce this.
+
+TR-069 (CWMP) and its successor TR-369 (User Services Platform) manage the
+residential gateway function above the ONU - firmware, Wi-Fi configuration,
+diagnostics. TR-369 replaces the polling, single-controller CWMP model with a
+publish-subscribe architecture supporting multiple controllers, which matters
+for operators running managed Wi-Fi and third-party service platforms.
+
+Broadband Forum TR-101, TR-156, TR-167 and TR-178 define the architectural
+frameworks for Ethernet-based aggregation and PON access; TR-384 and the cloud
+CO work define the virtualised equivalents.
+
+8.6 Planning, Design and GIS Tooling
+
+Outside plant design is a geospatial optimisation problem, and the software
+that supports it has become a genuine competitive differentiator in FTTH
+rollouts. A modern toolchain ingests cadastral and building data, existing duct
+and pole records, and traffic forecasts, then generates candidate network
+designs, computes bills of material, estimates civil works cost per premise and
+produces splice schedules and as-built documentation. Automated design can cut
+engineering time per premise by an order of magnitude relative to manual CAD
+work, which matters when a national build covers millions of premises.
+
+The quality of the underlying records is the limiting factor. Carriers with
+accurate duct and pole inventory build faster and cheaper than those without,
+and a significant share of FTTH cost overruns trace to discovering that the
+duct is collapsed, occupied or absent.
+
+8.7 Analytics, Machine Learning and Digital Twins
+
+Applied uses that are in production rather than aspirational:
+
+Predictive fibre fault detection. Trending OTDR signatures, received optical
+power and pre-FEC BER to identify degrading splices, water ingress and bend
+events before service is affected.
+
+Optical margin optimisation. Using measured performance to reclaim design
+margin, increasing modulation order or channel count on existing links.
+
+PON performance analytics. Correlating ONU-reported statistics across a
+population to distinguish a plant fault affecting one branch from a Wi-Fi
+problem inside one home - an important cost driver, since a large fraction of
+broadband truck rolls address faults that are not in the operator's network.
+
+Traffic forecasting and capacity planning, feeding augmentation decisions on
+PON ports, uplinks and wavelengths.
+
+Field workforce optimisation, routing technicians and predicting job duration.
+
+Digital twin of the optical network. A simulation model kept synchronised with
+live telemetry, used to test configuration changes, evaluate failure scenarios
+and validate upgrade plans before touching production. The value depends
+entirely on inventory accuracy; a twin built on stale records produces
+confident wrong answers.
+
+Distributed fibre optic sensing deserves mention as an emerging software-
+plus-hardware capability. Interrogating the fibre itself for acoustic,
+temperature or strain signatures turns the cable into a distributed sensor,
+supporting third-party dig detection, cable route intrusion monitoring and
+even seismic and infrastructure monitoring as an ancillary revenue stream.
+
+
+================================================================================
+9. DEPLOYMENT, TEST AND OPERATIONS
+================================================================================
+
+9.1 Where the Money Goes
+
+In a typical FTTH build, civil works - trenching, ducting, pole make-ready,
+permits, reinstatement - account for 60-80 percent of capital cost. The glass
+itself is a minor line item. Every architectural decision that reduces digging
+therefore has more financial leverage than any decision about optics.
+
+This drives the standard cost-reduction playbook: reuse existing ducts and
+poles wherever regulation permits; micro-trenching and narrow-trench techniques
+in urban streets; aerial deployment where the pole infrastructure exists and
+local rules allow; directional boring under obstacles; and micro-duct with
+blown fibre so that the expensive civil pass is made once and capacity is added
+later without re-excavation.
+
+Pole and duct access regulation is consequently a first-order commercial
+variable, not a legal footnote. Markets that mandated cost-based access to
+incumbent ducts and poles have seen materially faster and cheaper fibre
+rollouts than those that did not.
+
+9.2 Build Sequence
+
+  1. Survey and design. Desktop design from GIS records, then field validation.
+     The gap between records and reality is where schedules slip.
+  2. Permitting and wayleaves. Frequently the longest-duration activity, and
+     largely outside engineering control.
+  3. Civil works. Duct, chambers, pole make-ready.
+  4. Cable installation. Blowing or pulling, with tension and bend radius
+     monitored - fibre damaged during installation may pass initial test and
+     fail months later.
+  5. Splicing and termination. Closures, cabinets, splitter installation.
+  6. Test and acceptance. Bidirectional insertion loss and OTDR traces on every
+     fibre, recorded against the as-built record.
+  7. As-built documentation. The step most often compressed under schedule
+     pressure and the one that most reliably generates cost later.
+  8. Service activation. Drop installation, ONT provisioning, in-home work.
+
+9.3 Acceptance Criteria
+
+Typical thresholds for carrier acceptance of new access plant:
+
+    Fusion splice loss                 <= 0.10 dB (bidirectional average)
+    Connector pair loss                <= 0.35 dB
+    Connector return loss (APC)        <= -55 dB
+    End-to-end ODN loss                Within design budget + 1 dB
+    No reflective events above         -45 dB in the path
+    Fibre end face cleanliness         IEC 61300-3-35 compliant
+
+Bidirectional measurement matters because OTDR traces are asymmetric where mode
+field diameters differ; a splice between dissimilar fibres can read as gain in
+one direction and excess loss in the other. Averaging both directions gives the
+true figure. Technicians who report "gainers" have usually not been trained on
+this.
+
+9.4 Fault Management in Live Networks
+
+The fault categories, in rough order of frequency:
+
+Customer premises and in-home Wi-Fi issues. Not a fibre fault at all, but they
+consume network operations attention and generate truck rolls. Distinguishing
+them cheaply and remotely is one of the highest-return investments in access
+operations.
+
+Drop cable damage. Pets, gardening, building work, ladders. Localised and
+cheap to fix but high in volume.
+
+Connector contamination and poor re-mating, typically introduced during other
+maintenance activity.
+
+Distribution or feeder fibre cuts. Third-party excavation is the dominant
+cause worldwide. A feeder cut affects everyone behind it, which is why feeder
+routes are the segment where diverse routing and protection can be justified.
+
+Splitter and closure degradation, usually water ingress over years.
+
+Active equipment failure - the least common category in a well-run network,
+which is a reversal of the copper-era intuition.
+
+Mean time to repair on outside plant is dominated by locate-and-access time,
+not by splicing time. Accurate records, embedded monitoring and pre-positioned
+spares move the number more than technician skill does.
+
+9.5 Safety
+
+Optical power at the levels used in amplified DWDM and Raman systems is
+genuinely hazardous to eyesight and, at Raman pump levels, capable of igniting
+contamination on a connector end face. Fibre ends are also a puncture and
+ingestion hazard. Standard practice: never view a fibre end with the naked eye
+or an unfiltered scope, treat every fibre as live until proven otherwise, use
+automatic laser shutdown (ITU-T G.664) on amplified systems, dispose of fibre
+offcuts into a dedicated container, and observe the IEC 60825 laser safety
+classification applicable to the equipment.
+
+
+================================================================================
+10. BUSINESS USE CASES
+================================================================================
+
+10.1 Residential Broadband
+
+The volume case. Fibre displaces DSL, cable and fixed wireless on the strength
+of symmetric capacity, latency stability, and an operating cost structure that
+is fundamentally better: no field-powered cabinets, no line conditioning, far
+fewer faults, and lower energy per subscriber.
+
+The commercial arguments an operator actually makes:
+
+  - Lower churn. Fibre subscribers churn measurably less than DSL subscribers
+    in most markets, which compounds over the asset life.
+  - Lower cost to serve. Fewer faults per subscriber per year, fewer truck
+    rolls, lower energy.
+  - Higher ARPU through speed tiering, though the elasticity is weak: most
+    households do not use a gigabit, and the marketing challenge is to sell
+    reliability and upstream capacity rather than headline speed.
+  - Adjacent revenue: managed Wi-Fi, security, streaming bundles, smart home.
+  - Asset value. Passed and connected homes on fibre are valued by
+    infrastructure investors at multiples that copper networks do not attract.
+
+The risk is take-up. A build is justified on homes connected, not homes passed,
+and in competitive markets two or three operators may overbuild the same
+street, splitting a take rate that none of their business cases assumed.
+
+10.2 Business Connectivity
+
+Three tiers, with different economics:
+
+Dedicated internet access and point-to-point Ethernet over dark or lit fibre,
+sold to large enterprises with committed service levels, sub-10 ms latency
+guarantees and rapid restoration. High margin, low volume, long sales cycle.
+
+Symmetric business broadband over XGS-PON, addressing the small and medium
+business segment that was historically served by leased lines it could not
+afford or by consumer broadband that did not meet its needs. This is a
+significant volume opportunity because the incremental cost over residential
+PON is small while the price premium is large.
+
+Multi-site connectivity, increasingly delivered as SD-WAN over fibre
+underlay, where the fibre operator either sells the underlay wholesale or moves
+up the stack to sell the managed service.
+
+10.3 Mobile Transport
+
+Fibre and mobile are not separate businesses. Dense 5G, and prospectively 6G,
+is unbuildable without fibre to the cell site, and the small-cell densification
+required for millimetre-wave and high-band coverage multiplies the number of
+sites requiring transport.
+
+For an operator that owns both, this creates a real strategic advantage: the
+FTTH build and the cell site backhaul build share routes, share civil works and
+share transport equipment. For an operator that owns only mobile, transport
+becomes a large recurring cost paid to whoever owns the fibre. This asymmetry
+explains a substantial share of the fibre acquisition and joint-venture activity
+of recent years.
+
+PON-based xHaul is the notable technical development: reusing the residential
+ODN to carry cell site transport, with dedicated wavelengths or dedicated
+T-CONTs and low-latency scheduling. It turns an existing asset into mobile
+transport at near-zero incremental civil cost.
+
+10.4 Data Centre Interconnect and AI Infrastructure
+
+The fastest-growing transport segment. Requirements differ from classical
+carrier transport: very high capacity between a small number of sites, extreme
+sensitivity to cost and power per bit, tolerance for simpler line systems, and
+a buyer who is technically sophisticated and willing to disaggregate.
+
+AI training and inference have intensified this. Training clusters exceed the
+power available at a single site, forcing distributed training across
+campuses and driving demand for very high capacity, low latency, tightly
+synchronised interconnect over metro and regional distances. Hyperscalers have
+responded by buying dark fibre at scale, funding new routes, investing directly
+in fibre manufacturing, and pushing optical technology roadmaps in directions
+that carriers then inherit.
+
+For carriers the opportunity is wholesale capacity, dark fibre leasing,
+colocation adjacency and managed optical fibre networks where the carrier
+builds and operates a dedicated line system for a single hyperscaler customer.
+The risk is that these customers are few, sophisticated and capable of
+building their own.
+
+10.5 Wholesale, Open Access and Dark Fibre
+
+Separating infrastructure from retail service has become a mainstream model.
+
+Dark fibre leasing sells the glass, with the customer providing all optics.
+Simple, low-touch, long contract terms, and attractive to financial investors
+because revenue is predictable and operating cost is low.
+
+Wavelength services sell a managed lambda - more revenue per fibre than dark
+fibre but requiring an operated line system.
+
+Bitstream and open access PON sells a Layer 2 or Layer 3 service to retail
+service providers, who own the customer relationship. This is the model behind
+national wholesale networks and many altnet builds, and it depends heavily on
+regulated or contractual non-discrimination.
+
+The structural trend is that passive infrastructure is increasingly owned by
+entities optimising for stable long-term yield, while service competition
+happens above it. Engineers should understand that this changes technical
+priorities: a wholesale-only operator optimises for open interfaces, service
+velocity and operational cost per port, not for differentiated retail features.
+
+10.6 Utilities, Transport and Public Sector
+
+Electricity utilities were among the earliest large fibre owners through OPGW
+on transmission lines, originally for protection signalling and SCADA. Many
+have monetised surplus capacity, and some have become significant wholesale
+carriers. The same is true of railways, motorway authorities and pipeline
+operators, all of whom own long linear rights of way - the scarcest asset in
+telecoms.
+
+Public sector use cases include municipal networks, national research and
+education networks, e-government connectivity, smart city sensing and
+emergency services networks. These are frequently subsidised, which introduces
+state aid rules, open access obligations and reporting requirements that shape
+technical design.
+
+10.7 Submarine and International
+
+Submarine cable is a distinct business with distinct dynamics: very large
+up-front capital, 25-year design life, consortium or private ownership,
+and, increasingly, hyperscaler rather than carrier funding. Content providers
+now own or co-own a substantial share of new transoceanic capacity, having
+moved from being customers of carriers to being builders.
+
+For a national carrier, the relevant questions are landing station access,
+backhaul from landing stations to major metros, route diversity across
+different cable systems, and resilience against cable cuts - which are
+disproportionately caused by fishing and anchoring in shallow water and have
+become a geopolitical concern.
+
+10.8 Emerging and Adjacent
+
+Fibre sensing as a service: monetising the acoustic and strain sensing
+capability of installed fibre for perimeter security, dig detection,
+infrastructure health monitoring and seismology.
+
+Private optical networks for industrial campuses, ports and airports,
+frequently bundled with private 5G.
+
+Quantum key distribution over fibre, currently a niche with real physical
+constraints on distance and key rate, but of active interest to financial and
+government customers and a driver of national testbed funding.
+
+
+================================================================================
+11. ECONOMICS AND COMMERCIAL MODELS
+================================================================================
+
+11.1 The Metrics That Govern Decisions
+
+Homes passed. Premises where the network runs close enough that a connection
+requires only a drop. The denominator for coverage obligations and the primary
+unit of build progress.
+
+Homes connected. Premises actually taking service. The denominator that
+matters financially.
+
+Take rate. Connected divided by passed. The single most sensitive variable in
+any FTTH business case. A build modelled at 40 percent take rate that achieves
+25 percent typically does not clear its cost of capital, regardless of how well
+it was engineered.
+
+Cost per home passed. Ranges very widely - roughly 250 to 600 currency units
+per premise in dense urban areas with good duct availability, and two to four
+times that in rural or duct-poor environments. Dominated by civil works.
+
+Cost per home connected. Adds the drop, the ONT, installation labour and
+activation. Typically another 150-400 per premise.
+
+ARPU, churn and customer lifetime value. The revenue side, against which the
+above is amortised over 10-20 years.
+
+11.2 The Structure of the Case
+
+The characteristic difficulty of fibre investment is that cost is front-loaded
+and certain, while revenue is back-loaded and uncertain. Payback periods of
+7-12 years are normal, which places fibre in a different investment category
+from most telecom spending and explains why it attracts infrastructure funds
+rather than growth investors, why public subsidy is common in rural areas, and
+why operators sequence builds by expected take rate rather than by engineering
+convenience.
+
+Levers that improve the case:
+
+  - Pre-marketing and demand aggregation before building a street, so that
+    take rate is known rather than assumed.
+  - Wholesale revenue on the same asset, raising utilisation per home passed.
+  - Reuse of existing duct, pole and building infrastructure.
+  - Phased split-ratio and OLT population, deferring active capex until
+    subscribers connect.
+  - Subsidy and public funding in areas that cannot be built commercially.
+  - Copper decommissioning, which converts a parallel operating cost into a
+    saving and frees exchange real estate - often the largest single opex
+    benefit, and frequently delayed by regulatory obligations to maintain
+    legacy service.
+
+11.3 Operating Cost Structure
+
+Relative to copper access, fibre reduces energy consumption per subscriber
+substantially (a passive splitter consumes nothing; a field-powered DSLAM
+cabinet consumes continuously and needs batteries), reduces fault rate per
+subscriber per year by roughly an order of magnitude, and removes the line
+plant maintenance activities that dominate copper opex.
+
+It introduces new costs: ODN record-keeping, specialised splicing skills, and
+the operational complexity of managing multiple PON generations coexisting on
+one plant during migration.
+
+11.4 Migration Economics
+
+Most incumbents are not building greenfield; they are migrating. The decision
+sequence is typically:
+
+  1. Overlay XGS-PON on existing GPON plant using coexistence elements,
+     avoiding any outside plant change.
+  2. Migrate high-value and high-usage subscribers first, which relieves
+     congestion on the GPON port and frees capacity for the remainder.
+  3. Move business and mobile transport onto the same infrastructure to raise
+     utilisation.
+  4. Introduce 50G PON where capacity or competitive pressure justifies it,
+     initially on selected ports rather than network-wide.
+  5. Decommission GPON on a port-by-port basis once the residual population is
+     small enough to migrate in a single campaign.
+
+The important principle is that the ODN is not touched at any step. That is the
+whole architectural point of wavelength coexistence, and it is why ODN design
+quality determines how cheaply an operator can execute the next twenty years of
+technology transitions.
+
+
+================================================================================
+12. STANDARDS BODIES AND THE ECOSYSTEM
+================================================================================
+
+12.1 Who Specifies What
+
+ITU-T Study Group 15. Optical transport and access. Owns the G-series: fibre
+specifications (G.65x), WDM grids (G.694), OTN (G.709), PON (G.984, G.987,
+G.9807, G.989, G.9804), synchronisation (G.826x, G.827x) and management models.
+The authoritative source for carrier optical networking.
+
+IEEE 802.3. Ethernet, including EPON (802.3ah, 802.3av, 802.3ca) and the
+Ethernet PHY specifications that define grey optics. IEEE 1588 defines
+precision time protocol.
+
+Broadband Forum. Access architecture and management: TR-101/TR-178
+architecture, TR-069/TR-369 device management, conformance and interoperability
+testing for PON, and the cloud CO and disaggregation work.
+
+OIF. Implementation agreements for coherent interfaces - 400ZR, 800ZR/ZR+,
+1600ZR - and for the electrical and optical interfaces inside modules. The body
+that made coherent pluggables interoperable rather than vendor-specific.
+
+FSAN. An operator and vendor forum that develops PON requirements which are
+then standardised in ITU-T. Effectively the requirements front end of the PON
+standards process.
+
+MEF. Carrier Ethernet service definitions and, more recently, SD-WAN and
+lifecycle service orchestration frameworks.
+
+Telecom Infra Project. Operator-driven open designs including disaggregated
+transport (Phoenix, Cassini/Galileo family), open optical line systems, the
+GNPy physical layer modelling library, and open access architectures.
+
+Open Networking Foundation and successor communities. SDN and disaggregation,
+including VOLTHA, SEBA and TAPI.
+
+OpenROADM MSA. Operator-led interoperability specifications and YANG models for
+multi-vendor ROADM networks.
+
+IETF. Transport-relevant protocol and model work: NETCONF, YANG, ACTN, PCE,
+segment routing.
+
+IEC and TIA. Component, connector, cable and test method standards, including
+the connector cleanliness grades used in field practice.
+
+12.2 The Supply Chain
+
+Fibre and cable: Corning, Prysmian, Sterlite Technologies, Furukawa/OFS,
+Fujikura, Sumitomo, YOFC, Hengtong.
+
+Systems - transport and access: Nokia, Ericsson, Huawei, ZTE, Ciena, Cisco,
+Adtran, Calix, Infinera, Fiberhome, Juniper, Nokia's and others' disaggregated
+offerings.
+
+Optical components and modules: Coherent, Lumentum, Broadcom, Marvell,
+Semtech, Source Photonics, Hisense, Accelink, Eoptolink, Innolight.
+
+DSP and silicon: Marvell, Broadcom, Cisco/Acacia, Nokia, Huawei/HiSilicon,
+plus merchant PON silicon from several suppliers.
+
+Test and measurement: EXFO, VIAVI, Anritsu, Yokogawa, Fluke Networks.
+
+Two structural observations. First, geopolitics has fragmented this supply
+chain: restrictions on Chinese vendors in several markets have reshaped
+procurement, raised costs and slowed some deployments, while accelerating
+domestic manufacturing initiatives elsewhere. Second, the component layer has
+consolidated significantly, so that a small number of DSP and optical component
+suppliers underpin most systems vendors' roadmaps - a concentration risk that
+carriers increasingly consider explicitly in vendor selection.
+
+
+================================================================================
+13. TECHNOLOGY DIRECTIONS TO 2030
+================================================================================
+
+13.1 Access
+
+50G PON moves from early deployment to volume. The initial asymmetric variant
+(50G down, 25G up) addresses most near-term needs; symmetric 50G follows for
+business and transport applications. The operational questions are wavelength
+coexistence with the installed GPON and XGS-PON base, optics cost curves, and
+whether the market will support a further generation beyond 50G in the TDM-PON
+line or will move to coherent access.
+
+Coherent PON is under active research and early standardisation discussion. It
+would bring digital coherent techniques - and therefore very large power
+budgets and much higher split ratios or reach - into the access network. The
+obstacle is cost and power per ONU, which must fall by orders of magnitude
+relative to transport-grade coherent to be viable at subscriber scale. The
+likely first applications are aggregation and business rather than mass-market
+residential.
+
+Fibre deeper into the mobile network, with PON-based fronthaul maturing and
+converged access nodes serving residential, business and cell sites from one
+platform, is a continuing direction rather than a discrete event.
+
+13.2 Transport
+
+800G per wavelength has become the mainstream high-capacity channel, and 1.6T
+is entering the deployment window, with shipment volumes and chipset revenues
+now rising sharply. Baud rates above 200 Gbaud, higher-order constellations,
+probabilistic constellation shaping and improved soft-decision FEC continue to
+push spectral efficiency towards practical limits.
+
+Spectrum extension is the other axis. C+L is standard on high-capacity routes;
+S band extension is under development. Since spectral efficiency is approaching
+its information-theoretic ceiling, capacity growth increasingly comes from more
+spectrum and more fibre rather than from more bits per symbol.
+
+Space-division multiplexing - multicore fibre with several cores in one
+cladding, and few-mode fibre using multiple spatial modes - is the longer-term
+answer to fibre exhaust. Multicore is already used in submarine trials and in
+some data centre research deployments; the constraints are splicing, connector
+and amplifier technology for multicore, which are maturing but not yet routine
+field practice.
+
+Hollow-core fibre has moved from laboratory curiosity to industrial
+scale-up. Guiding light in air rather than glass gives roughly a third lower
+propagation delay, very low nonlinearity, high power handling and, in the most
+recent nested antiresonant nodeless designs, attenuation below that of solid
+silica - published figures have gone under 0.1 dB/km, with even lower losses
+reported in research. Microsoft has been the most visible driver, having
+acquired Lumenisity in 2022 and subsequently scaled HCF manufacturing with
+partners to supply its own network; euNetworks, Comcast and BT have run
+operational routes and trials. The near-term applications are latency-sensitive
+financial routes, data centre interconnect and AI cluster interconnect. Broad
+carrier access use is further out and depends on cable, splicing and connector
+ecosystems, field skills and standards catching up.
+
+13.3 Architecture and Operations
+
+Pluggable coherent continues to displace transponders, pushing optical function
+into routers and compressing the traditional transport layer.
+
+Optical switching moves into the data centre as AI cluster topologies seek
+power and cost relief from electrical switching.
+
+Autonomous network operation progresses along the TM Forum levels: from
+assisted operation, through partial and conditional autonomy, towards
+closed-loop systems that detect degradation, compute a remedy, evaluate it
+against a digital twin and implement it without human intervention. Most
+carriers are realistically operating between conditional and high autonomy for
+specific, well-bounded loops - optical restoration, power optimisation,
+capacity augmentation triggers - rather than across the network as a whole.
+
+Energy efficiency has become a first-order design constraint rather than a
+reporting exercise, driven by electricity cost, sustainability commitments and,
+in some markets, the physical unavailability of additional grid power at
+existing sites. Metrics have shifted from watts per port to watts per gigabit
+per kilometre, and equipment selection now weighs power alongside capacity.
+
+Security concerns extend from the logical to the physical: fibre tapping
+detection, cable route resilience, submarine cable protection, and the
+long-horizon question of post-quantum cryptography for the control plane and
+for the encryption applied over optical links.
+
+
+================================================================================
+14. GLOSSARY
+================================================================================
+
+APD        Avalanche photodiode
+APC        Angled physical contact connector polish
+ASE        Amplified spontaneous emission
+AWG        Arrayed waveguide grating
+BER        Bit error rate
+CDC-F      Colourless, directionless, contentionless, flexible grid ROADM
+CO         Central office
+CPRI       Common public radio interface
+CWDM       Coarse wavelength division multiplexing
+DBA        Dynamic bandwidth assignment
+DCI        Data centre interconnect
+DFB        Distributed feedback laser
+DSP        Digital signal processor
+DU/CU      Distributed unit / centralised unit (RAN disaggregation)
+DWDM       Dense wavelength division multiplexing
+EDFA       Erbium-doped fibre amplifier
+eCPRI      Enhanced CPRI
+EPON       Ethernet passive optical network
+FEC        Forward error correction
+FSAN       Full Service Access Network group
+FTTx       Fibre to the home / building / cabinet / node / premises
+FWM        Four-wave mixing
+GEM        GPON encapsulation method
+GNPy       Open-source optical route planning library (TIP)
+GPON       Gigabit passive optical network
+HCF        Hollow-core fibre
+ITLA       Integrable tunable laser assembly
+MFD        Mode field diameter
+MPO/MTP    Multi-fibre push-on connector
+MSA        Multi-source agreement
+NANF       Nested antiresonant nodeless fibre
+NG-PON2    Next generation PON 2 (TWDM)
+ODN        Optical distribution network
+OLT        Optical line terminal
+OMCI       ONU management and control interface
+ONT/ONU    Optical network terminal / unit
+OPGW       Optical ground wire
+OSNR       Optical signal-to-noise ratio
+OSS/BSS    Operations / business support systems
+OTDR       Optical time domain reflectometer
+OTN        Optical transport network (ITU-T G.709)
+PIC        Photonic integrated circuit
+PLC        Planar lightwave circuit
+PMD        Polarisation-mode dispersion; also physical media dependent
+PON        Passive optical network
+PTP        Precision time protocol (IEEE 1588)
+QAM        Quadrature amplitude modulation
+QKD        Quantum key distribution
+ROADM      Reconfigurable optical add/drop multiplexer
+SDM        Space-division multiplexing
+SDN        Software-defined networking
+SMF        Single-mode fibre
+SOA        Semiconductor optical amplifier
+SRS/SBS    Stimulated Raman / Brillouin scattering
+T-CONT     Transmission container (PON upstream bandwidth construct)
+TAPI       Transport API (ONF)
+TDMA       Time-division multiple access
+TIP        Telecom Infra Project
+TWDM       Time and wavelength division multiplexing
+UPC        Ultra physical contact connector polish
+USP        User Services Platform (BBF TR-369)
+VCSEL      Vertical-cavity surface-emitting laser
+VOLTHA     Virtual OLT hardware abstraction
+WSS        Wavelength selective switch
+XGS-PON    10 Gigabit symmetric PON
+YANG       Data modelling language for network configuration
+ZR/ZR+     OIF coherent pluggable interface specifications
+
+
+================================================================================
+APPENDIX A. QUICK REFERENCE TABLES
+================================================================================
+
+A.1 Typical Attenuation
+
+    Wavelength    G.652.D typical    Notes
+    ----------    ---------------    --------------------------------
+    1310 nm       0.32 - 0.35 dB/km  PON upstream
+    1490 nm       0.21 - 0.24 dB/km  GPON downstream
+    1550 nm       0.18 - 0.20 dB/km  DWDM, C band
+    1625 nm       0.20 - 0.23 dB/km  Out-of-band monitoring
+
+    G.654.E at 1550 nm: approximately 0.16 dB/km
+
+A.2 Typical Component Loss
+
+    Fusion splice                     0.05 - 0.10 dB
+    Mechanical splice                 0.10 - 0.30 dB
+    Connector pair (clean, APC)       0.20 - 0.35 dB
+    1:2 splitter                      3.6 dB
+    1:4 splitter                      7.2 dB
+    1:8 splitter                      10.5 dB
+    1:16 splitter                     13.8 dB
+    1:32 splitter                     17.3 - 17.8 dB
+    1:64 splitter                     20.5 - 21.0 dB
+    PON coexistence element           0.5 - 1.5 dB
+
+A.3 PON Optical Power Budget Classes
+
+    Class      Budget     Common application
+    -------    -------    ---------------------------------------
+    B+         28 dB      GPON standard deployment
+    C+         32 dB      GPON extended reach or higher split
+    N1         29 dB      XGS-PON nominal
+    N2         31 dB      XGS-PON extended
+    E1         33 dB      XGS-PON extended budget
+    E2         35 dB      XGS-PON high budget
+
+A.4 Dispersion Reference
+
+    G.652 at 1310 nm         ~0 ps/(nm.km)
+    G.652 at 1550 nm         ~17 ps/(nm.km)
+    G.655 at 1550 nm         2 - 6 ps/(nm.km)
+    PMD, modern fibre        < 0.1 ps/sqrt(km)
+    PMD, legacy 1980s fibre  0.5 - 2 ps/sqrt(km)
+
+A.5 Coherent Modulation Reference
+
+    Format      Bits/symbol   Relative OSNR need   Typical application
+    ---------   -----------   ------------------   ---------------------
+    DP-QPSK     4             Baseline             Long haul, subsea
+    DP-8QAM     6             +3 dB                Regional
+    DP-16QAM    8             +6 dB                Metro, DCI
+    DP-64QAM    12            +13 dB               Short DCI
+
+A.6 Design Rules of Thumb
+
+    - Budget 3 dB of repair margin on any access plant; defend it.
+    - Split ratio, not distance, usually limits urban PON design.
+    - Civil works dominate FTTH capex; optimise digging before optics.
+    - Never mate APC to UPC.
+    - Inspect every connector end face before every mating.
+    - Bend faults appear first at the longest wavelength - test at 1625 nm.
+    - Measure splice loss bidirectionally and average.
+    - Design the ODN for thirty years; the electronics will change three times.
+    - A digital twin built on inaccurate inventory is worse than no twin.
+    - Take rate, not homes passed, determines whether the build was worth it.
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================

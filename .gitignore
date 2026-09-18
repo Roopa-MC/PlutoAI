@@ -1,0 +1,54 @@
+# ==============================
+# Environment / secrets
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+
+# ==============================
+# Python
+# ==============================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+.venv/
+venv/
+env/
+
+
+# ==============================
+# VS Code
+# ==============================
+
+.vscode/
+
+
+# ==============================
+# Runtime / personal data
+# ==============================
+
+conversation.json
+**/conversation.json
+
+
+# ==============================
+# Generated RAG files
+# ==============================
+
+embeddings.json
+**/embeddings.json
+
+knowledge.index
+**/knowledge.index
+
+
+# ==============================
+# OS files
+# ==============================
+
+.DS_Store
+Thumbs.db
