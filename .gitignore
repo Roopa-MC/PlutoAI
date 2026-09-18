@@ -52,3 +52,9 @@ knowledge.index
 
 .DS_Store
 Thumbs.db
+
+# ==============================
+# API keys
+# ==============================
+API-key.txt
+**/API-key.txt
