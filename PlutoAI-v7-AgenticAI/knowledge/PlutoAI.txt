@@ -1,0 +1,28 @@
+PlutoAI is a personal AI assistant built using Python and OpenAI's GPT models.
+It uses Retrieval-Augmented Generation (RAG) to search a private knowledge base.
+PlutoAI can use Python tools such as a calculator to perform specific tasks.
+It can also use web search to retrieve current information from the internet.
+The project demonstrates how LLMs, tools, RAG, and agentic workflows can work together.
+
+PlutoAI can be developed and customized for many different personal, professional, and business purposes.
+Its core architecture can be adapted by changing the knowledge base, tools, prompts, and agent logic.
+A personal version can organize notes, documents, learning materials, and other private information.
+A research version can combine private documents with web search to investigate a topic.
+A learning assistant can use course materials to answer questions and explain concepts.
+A programming assistant can provide coding guidance and use tools to test or calculate results.
+A business assistant can work with company documents, processes, policies, and operational knowledge.
+A telecom-focused version could use network specifications, architecture documents, and engineering knowledge.
+A product management version could assist with roadmaps, requirements, risks, and product documentation.
+A customer-support version could retrieve answers from product manuals and support documentation.
+A sales assistant could use product information, pricing rules, and customer-specific knowledge.
+A knowledge-management version could help employees find information distributed across many documents.
+A specialized RAG system can restrict answers to an organization's approved private knowledge.
+Additional Python tools can extend PlutoAI with calculations, data processing, file handling, or APIs.
+Agentic workflows can allow PlutoAI to decide which tools are needed for a particular task.
+Multiple tools can be combined when a request requires several different capabilities.
+Conversation memory can be added so PlutoAI can maintain context across multiple interactions.
+Different system prompts can give PlutoAI different roles, behaviors, and response guidelines.
+Access controls can be introduced so different users can access different knowledge sources.
+Evaluation mechanisms can measure the accuracy, relevance, and reliability of PlutoAI's responses.
+A user interface can be added to make PlutoAI accessible through a web or desktop application.
+The same architecture can therefore become a general-purpose assistant or a highly specialized AI application.
