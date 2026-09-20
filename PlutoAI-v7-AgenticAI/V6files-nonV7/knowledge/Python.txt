@@ -1,0 +1,13 @@
+Python is a high-level programming language.
+
+Python supports object-oriented programming.
+
+Python is widely used for artificial intelligence.
+
+Python can build APIs.
+
+Python is used for data science.
+
+Python supports machine learning libraries.
+
+Python is easy to learn.
